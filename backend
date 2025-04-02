@@ -1,0 +1,95 @@
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = 3000;
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// Error handling for malformed JSON
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ error: 'Invalid JSON payload' });
+    }
+    next();
+});
+
+// In-memory "database" (replace with PostgreSQL/MongoDB in production)
+let tasks = [];
+let idCounter = 1;
+
+// Helper function to find a task by ID
+const findTaskById = (id) => tasks.find(task => task.id === id);
+
+// GET: Fetch all tasks
+app.get('/tasks', (req, res) => {
+    res.json({ success: true, data: tasks });
+});
+
+// POST: Add a new task
+app.post('/tasks', (req, res) => {
+    const { text } = req.body;
+
+    if (!text || typeof text !== 'string') {
+        return res.status(400).json({ 
+            success: false, 
+            error: 'Task text is required and must be a string' 
+        });
+    }
+
+    const newTask = { id: idCounter++, text };
+    tasks.push(newTask);
+    res.status(201).json({ success: true, data: newTask });
+});
+
+// PUT: Update a task
+app.put('/tasks/:id', (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const { text } = req.body;
+
+    if (!text || typeof text !== 'string') {
+        return res.status(400).json({ 
+            success: false, 
+            error: 'Task text is required and must be a string' 
+        });
+    }
+
+    const task = findTaskById(taskId);
+    if (!task) {
+        return res.status(404).json({ 
+            success: false, 
+            error: 'Task not found' 
+        });
+    }
+
+    task.text = text;
+    res.json({ success: true, data: task });
+});
+
+app.delete('/tasks/:id', (req, res) => {
+    const taskId = parseInt(req.params.id);
+    tasks = tasks.filter(t => t.id !== taskId);
+    res.status(204).send(); // No Content
+});
+
+const deleteButton = document.createElement('button');
+deleteButton.textContent = 'Delete';
+deleteButton.classList.add('delete');
+deleteButton.addEventListener('click', () => deleteTask(task.id, li));  // Ensure the task ID is passed here
+li.appendChild(deleteButton);
+
+// 404 Handler for undefined routes
+app.use((req, res) => {
+    res.status(404).json({ 
+        success: false, 
+        error: 'Endpoint not found' 
+    });
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
