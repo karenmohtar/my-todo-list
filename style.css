@@ -1,0 +1,74 @@
+Format document
+body {
+            background-color: darkgray;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+    }
+.container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+    }
+h1 {
+            font-size: 24px;
+            color: darkgray;
+            margin-bottom: 15px;
+    }
+#taskInput {
+            font-size: 10px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+    }
+#taskButton {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 255, 0.925);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+    }
+#taskList {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+    }
+#taskList li {
+            background: #f1f1f1;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+    }
+#editButton {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+    }
+#deleteButton {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+    }
+button:hover {
+            opacity: 0.8;
+    }
+
